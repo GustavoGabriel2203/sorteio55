@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sorteio_55_tech/config/app_routes.dart';
+import 'package:sorteio_55_tech/core/database/dao/customer_dao.dart';
+import 'package:sorteio_55_tech/core/database/dao/events_dao.dart';
+import 'package:sorteio_55_tech/core/database/dao/whitelabel_dao.dart';
+import 'package:sorteio_55_tech/core/services/service_locator.dart';
+import 'package:sorteio_55_tech/features/auth/models/whitelabel.dart';
 import 'package:sorteio_55_tech/features/menu/presentation/widgets/menu_buttom.dart';
 
 class MenuPage extends StatelessWidget {
@@ -14,8 +19,8 @@ class MenuPage extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 32.w),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center, 
-              crossAxisAlignment: CrossAxisAlignment.center, 
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
@@ -51,8 +56,14 @@ class MenuPage extends StatelessWidget {
                 ),
                 MenuButton(
                   label: 'Sair',
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, AppRoutes.validator);
+                  onPressed: () async {
+                    await getIt<EventsDao>().clear();
+                    await getIt<WhitelabelDao>().clear();
+                    await getIt<CustomerDao>().clearDatabase();
+                    Navigator.pushReplacementNamed(
+                      context,
+                      AppRoutes.validator,
+                    );
                   },
                 ),
               ],

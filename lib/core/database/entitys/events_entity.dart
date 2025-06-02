@@ -1,10 +1,10 @@
 import 'package:floor/floor.dart';
 
 @Entity(tableName: 'events')
-class Events {
+class EventsEntity {
   @PrimaryKey(autoGenerate: true)
   final int? id;
   final String name;
 
-  Events({required this.id, required this.name});
+  EventsEntity({required this.id, required this.name});
 }

@@ -39,14 +39,13 @@ class _EventPageState extends State<EventPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-              AppRoutes.validator,
-              (route) => false,
-            );
+            Navigator.of(
+              context,
+            ).pushNamedAndRemoveUntil(AppRoutes.validator, (route) => false);
           },
         ),
       ),
-      body: BlocBuilder<EventCubit, EventState>(
+      body: BlocConsumer<EventCubit, EventState>(
         builder: (context, state) {
           if (state is EventLoading) {
             return const Center(child: CircularProgressIndicator());
@@ -106,10 +105,7 @@ class _EventPageState extends State<EventPage> {
                         return _EventCard(
                           name: event.name,
                           onTap: () {
-                            Navigator.pushReplacementNamed(
-                              context,
-                              AppRoutes.menu,
-                            );
+                            _eventCubit.onEventSelected(event);
                           },
                         );
                       },
@@ -122,6 +118,11 @@ class _EventPageState extends State<EventPage> {
 
           return const SizedBox();
         },
+        listener: (BuildContext context, EventState state) {
+          if (state is OnEventSelected) {
+            Navigator.pushReplacementNamed(context, AppRoutes.menu);
+          }
+        },
       ),
     );
   }
@@ -131,15 +132,12 @@ class _EventCard extends StatelessWidget {
   final String name;
   final VoidCallback onTap;
 
-  const _EventCard({
-    required this.name,
-    required this.onTap,
-  });
+  const _EventCard({required this.name, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: const Color(0xFF66BB6A), 
+      color: const Color(0xFF66BB6A),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
       elevation: 4,
       child: InkWell(
@@ -162,10 +160,7 @@ class _EventCard extends StatelessWidget {
               SizedBox(height: 12.h),
               Text(
                 'Toque para continuar',
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 14.sp,
-                ),
+                style: TextStyle(color: Colors.white70, fontSize: 14.sp),
                 textAlign: TextAlign.center,
               ),
             ],

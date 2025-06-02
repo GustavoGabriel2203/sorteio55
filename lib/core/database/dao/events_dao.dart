@@ -1,11 +1,14 @@
 import 'package:floor/floor.dart';
-import 'package:sorteio_55_tech/features/event/models/event_model.dart';
+import 'package:sorteio_55_tech/core/database/entitys/events_entity.dart';
 
 @dao
 abstract class EventsDao {
   @insert
-  Future<void> insertEvent(Event model);
+  Future<void> insertEvent(EventsEntity model);
 
   @Query('SELECT * FROM events ORDER BY id DESC LIMIT 1')
-  Future<Event?> getEvents();
+  Future<EventsEntity?> getCurrentEvent();
+
+  @Query('DELETE FROM events')
+  Future<void> clear();
 }

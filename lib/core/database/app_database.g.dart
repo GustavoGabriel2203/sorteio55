@@ -76,6 +76,8 @@ class _$AppDatabase extends AppDatabase {
 
   WhitelabelDao? _whitelabelDaoInstance;
 
+  EventsDao? _eventsDaoInstance;
+
   Future<sqflite.Database> open(
     String path,
     List<Migration> migrations, [
@@ -101,6 +103,8 @@ class _$AppDatabase extends AppDatabase {
             'CREATE TABLE IF NOT EXISTS `customers` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `email` TEXT NOT NULL, `phone` TEXT NOT NULL, `sorted` INTEGER NOT NULL, `event` INTEGER NOT NULL, `sync` INTEGER NOT NULL)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `whitelabels` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `whitelabelId` INTEGER NOT NULL, `name` TEXT NOT NULL)');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `events` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -116,6 +120,11 @@ class _$AppDatabase extends AppDatabase {
   @override
   WhitelabelDao get whitelabelDao {
     return _whitelabelDaoInstance ??= _$WhitelabelDao(database, changeListener);
+  }
+
+  @override
+  EventsDao get eventsDao {
+    return _eventsDaoInstance ??= _$EventsDao(database, changeListener);
   }
 }
 
@@ -297,8 +306,50 @@ class _$WhitelabelDao extends WhitelabelDao {
   }
 
   @override
+  Future<void> clear() async {
+    await _queryAdapter.queryNoReturn('DELETE FROM whitelabels');
+  }
+
+  @override
   Future<void> insertWhitelabel(WhitelabelModel model) async {
     await _whitelabelModelInsertionAdapter.insert(
         model, OnConflictStrategy.abort);
+  }
+}
+
+class _$EventsDao extends EventsDao {
+  _$EventsDao(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database),
+        _eventsEntityInsertionAdapter = InsertionAdapter(
+            database,
+            'events',
+            (EventsEntity item) =>
+                <String, Object?>{'id': item.id, 'name': item.name});
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<EventsEntity> _eventsEntityInsertionAdapter;
+
+  @override
+  Future<EventsEntity?> getCurrentEvent() async {
+    return _queryAdapter.query('SELECT * FROM events ORDER BY id DESC LIMIT 1',
+        mapper: (Map<String, Object?> row) =>
+            EventsEntity(id: row['id'] as int?, name: row['name'] as String));
+  }
+
+  @override
+  Future<void> clear() async {
+    await _queryAdapter.queryNoReturn('DELETE FROM events');
+  }
+
+  @override
+  Future<void> insertEvent(EventsEntity model) async {
+    await _eventsEntityInsertionAdapter.insert(model, OnConflictStrategy.abort);
   }
 }

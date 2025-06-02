@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:sorteio_55_tech/core/database/dao/events_dao.dart';
 import 'package:sorteio_55_tech/core/database/dao/whitelabel_dao.dart';
 
 import 'package:sorteio_55_tech/core/lucid_validator/lucid_model.dart';
@@ -33,7 +34,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   void _submitForm(BuildContext context) async {
   if (_formKey.currentState!.validate()) {
-    final model = await getIt<WhitelabelDao>().getLastWhitelabel();
+    final model = await getIt<EventsDao>().getCurrentEvent();
 
     if (model == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -46,7 +47,7 @@ class _RegisterPageState extends State<RegisterPage> {
       name: nameController.text.trim(),
       email: emailController.text.trim(),
       phone: phoneController.text.trim(),
-      event: model.whitelabelId,
+      event: model.id ?? 0,
     );
 
     context.read<RegisterCubit>().registerCustomer(customer.toEntity());

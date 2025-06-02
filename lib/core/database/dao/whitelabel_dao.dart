@@ -8,4 +8,7 @@ abstract class WhitelabelDao {
 
   @Query('SELECT * FROM whitelabels ORDER BY id DESC LIMIT 1')
   Future<WhitelabelModel?> getLastWhitelabel();
+
+  @Query('DELETE FROM whitelabels')
+  Future<void> clear();
 }

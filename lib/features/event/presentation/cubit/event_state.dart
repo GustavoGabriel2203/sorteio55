@@ -23,6 +23,8 @@ class EventLoaded extends EventState {
 
 class EventEmpty extends EventState {}
 
+class OnEventSelected extends EventState {}
+
 class EventError extends EventState {
   final String message;
 

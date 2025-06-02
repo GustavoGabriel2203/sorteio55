@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sorteio_55_tech/core/database/dao/events_dao.dart';
 
 import 'package:sorteio_55_tech/core/services/service_locator.dart';
 import 'package:sorteio_55_tech/core/database/dao/whitelabel_dao.dart';
@@ -25,10 +26,9 @@ class _ParticipantsPageState extends State<ParticipantsPage> {
   }
 
   Future<void> _loadEventIdAndFetchParticipants() async {
-    final model = await getIt<WhitelabelDao>().getLastWhitelabel();
+    final model = await getIt<EventsDao>().getCurrentEvent();
     if (model != null) {
-  
-      participantsCubit.fetchParticipants(model.whitelabelId);
+      participantsCubit.fetchParticipants(model.id ?? 0);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Nenhum  Participante Encontrado.')),
@@ -95,7 +95,10 @@ class _ParticipantsPageState extends State<ParticipantsPage> {
                         width: 1.w,
                       ),
                     ),
-                    padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 20.w),
+                    padding: EdgeInsets.symmetric(
+                      vertical: 16.h,
+                      horizontal: 20.w,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -130,7 +133,10 @@ class _ParticipantsPageState extends State<ParticipantsPage> {
                             SizedBox(width: 8.w),
                             Text(
                               participant.phone,
-                              style: TextStyle(fontSize: 14.sp, color: Colors.white70),
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                color: Colors.white70,
+                              ),
                             ),
                           ],
                         ),
@@ -145,7 +151,10 @@ class _ParticipantsPageState extends State<ParticipantsPage> {
                             SizedBox(width: 8.w),
                             Text(
                               participant.email,
-                              style: TextStyle(fontSize: 14.sp, color: Colors.white70),
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                color: Colors.white70,
+                              ),
                             ),
                           ],
                         ),
@@ -168,7 +177,8 @@ class _ParticipantsPageState extends State<ParticipantsPage> {
                 'Erro desconhecido',
                 style: TextStyle(color: Colors.red, fontSize: 16),
               ),
-            );},
+            );
+          },
         ),
       ),
     );
