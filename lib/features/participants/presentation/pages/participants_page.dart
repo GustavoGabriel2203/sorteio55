@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sorteio_55_tech/core/database/dao/events_dao.dart';
 
 import 'package:sorteio_55_tech/core/services/service_locator.dart';
-import 'package:sorteio_55_tech/core/database/dao/whitelabel_dao.dart';
 import 'package:sorteio_55_tech/features/participants/presentation/cubit/participants_cubit.dart';
 import 'package:sorteio_55_tech/features/participants/presentation/cubit/participants_state.dart';
 

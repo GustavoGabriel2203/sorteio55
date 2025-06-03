@@ -31,17 +31,6 @@ import 'package:sorteio_55_tech/features/raffle/presentation/cubit/raffle_cubit.
 final getIt = GetIt.instance;
 
 Future<void> setupLocator() async {
-  // AUTH
-  getIt.registerLazySingleton<WhitelabelService>(() => WhitelabelService());
-  getIt.registerLazySingleton<WhitelabelUsecase>(
-    () => WhitelabelUsecase(getIt<WhitelabelService>()),
-  );
-  getIt.registerFactory<AuthCubit>(() => AuthCubit(getIt<WhitelabelUsecase>()));
-
-  // EVENT
-  getIt.registerLazySingleton<EventService>(() => EventService());
-  getIt.registerFactory<EventCubit>(() => EventCubit(getIt<EventService>()));
-
   // DATABASE (Floor)
   final database =
       await $FloorAppDatabase.databaseBuilder('app_database.db').build();
@@ -51,6 +40,20 @@ Future<void> setupLocator() async {
   getIt.registerSingleton<WhitelabelDao>(database.whitelabelDao);
   getIt.registerSingleton<EventsDao>(database.eventsDao);
 
+  // AUTH
+  getIt.registerLazySingleton<WhitelabelService>(() => WhitelabelService());
+  getIt.registerLazySingleton<WhitelabelUsecase>(
+    () => WhitelabelUsecase(getIt<WhitelabelService>()),
+  );
+  getIt.registerFactory<AuthCubit>(() => AuthCubit(getIt<WhitelabelUsecase>()));
+
+  // EVENT
+  getIt.registerLazySingleton<EventService>(() => EventService());
+  getIt.registerLazySingleton<EventCubit>(() => EventCubit(
+        getIt<EventService>(),
+        getIt<EventsDao>(),
+      ));
+
   // REGISTER (local + remoto)
   getIt.registerLazySingleton<RemoteCustomerService>(
     () => RemoteCustomerService(),
@@ -58,10 +61,8 @@ Future<void> setupLocator() async {
   getIt.registerLazySingleton<RemoteCustomerRepository>(
     () => RemoteCustomerRepositoryImpl(getIt<RemoteCustomerService>()),
   );
-
   getIt.registerFactory(
-    () =>
-        RegisterCubit(getIt<CustomerDao>(), getIt<RemoteCustomerRepository>()),
+    () => RegisterCubit(getIt<CustomerDao>(), getIt<RemoteCustomerRepository>()),
   );
 
   // PARTICIPANTS

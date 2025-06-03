@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:sorteio_55_tech/core/database/dao/events_dao.dart';
-import 'package:sorteio_55_tech/core/database/dao/whitelabel_dao.dart';
 
 import 'package:sorteio_55_tech/core/lucid_validator/lucid_model.dart';
 import 'package:sorteio_55_tech/core/lucid_validator/lucid_validator.dart';

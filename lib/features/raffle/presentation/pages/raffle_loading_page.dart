@@ -12,11 +12,32 @@ class RaffleLoadingPage extends StatefulWidget {
   State<RaffleLoadingPage> createState() => _RaffleLoadingPageState();
 }
 
-class _RaffleLoadingPageState extends State<RaffleLoadingPage> {
+class _RaffleLoadingPageState extends State<RaffleLoadingPage>
+    with TickerProviderStateMixin {
+  late final AnimationController _controller;
+
   @override
   void initState() {
     super.initState();
-    context.read<RaffleCubit>().sortear();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 5), // Duração de 5 segundos
+    );
+
+    _controller.forward(); // Inicia a animação
+
+    // Chama o sorteio após a animação terminar
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed && mounted) {
+        context.read<RaffleCubit>().sortear();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -98,9 +119,11 @@ class _RaffleLoadingPageState extends State<RaffleLoadingPage> {
           return Center(
             child: Lottie.asset(
               'assets/lottie/loading.json',
+              controller: _controller, // Controlador da animação
               width: double.infinity,
               height: double.infinity,
               fit: BoxFit.contain,
+              repeat: false,
             ),
           );
         },

@@ -5,7 +5,6 @@ import 'package:sorteio_55_tech/core/database/dao/customer_dao.dart';
 import 'package:sorteio_55_tech/core/database/dao/events_dao.dart';
 import 'package:sorteio_55_tech/core/database/dao/whitelabel_dao.dart';
 import 'package:sorteio_55_tech/core/services/service_locator.dart';
-import 'package:sorteio_55_tech/features/auth/models/whitelabel.dart';
 import 'package:sorteio_55_tech/features/menu/presentation/widgets/menu_buttom.dart';
 
 class MenuPage extends StatelessWidget {

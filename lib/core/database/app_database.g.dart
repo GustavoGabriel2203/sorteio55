@@ -104,7 +104,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `whitelabels` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `whitelabelId` INTEGER NOT NULL, `name` TEXT NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `events` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `events` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, PRIMARY KEY (`id`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -340,7 +340,7 @@ class _$EventsDao extends EventsDao {
   Future<EventsEntity?> getCurrentEvent() async {
     return _queryAdapter.query('SELECT * FROM events ORDER BY id DESC LIMIT 1',
         mapper: (Map<String, Object?> row) =>
-            EventsEntity(id: row['id'] as int?, name: row['name'] as String));
+            EventsEntity(id: row['id'] as int, name: row['name'] as String));
   }
 
   @override
@@ -350,6 +350,7 @@ class _$EventsDao extends EventsDao {
 
   @override
   Future<void> insertEvent(EventsEntity model) async {
-    await _eventsEntityInsertionAdapter.insert(model, OnConflictStrategy.abort);
+    await _eventsEntityInsertionAdapter.insert(
+        model, OnConflictStrategy.replace);
   }
 }

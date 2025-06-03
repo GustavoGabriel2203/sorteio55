@@ -1,15 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sorteio_55_tech/core/database/dao/events_dao.dart';
 import 'package:sorteio_55_tech/core/database/entitys/events_entity.dart';
-import 'package:sorteio_55_tech/core/services/service_locator.dart';
 import 'package:sorteio_55_tech/features/event/models/event_model.dart';
 import 'package:sorteio_55_tech/features/event/repositories/service_event.dart';
 import 'event_state.dart';
 
 class EventCubit extends Cubit<EventState> {
   final EventService _eventService;
+  final EventsDao _eventsDao;
 
-  EventCubit(this._eventService) : super(EventInitial());
+  EventCubit(this._eventService, this._eventsDao) : super(EventInitial());
 
   Future<void> fetchEvents(int whitelabelId) async {
     emit(EventLoading());
@@ -27,13 +27,22 @@ class EventCubit extends Cubit<EventState> {
     }
   }
 
-  void onEventSelected(Event event) async {
-    final dao = getIt<EventsDao>();
+  Future<void> onEventSelected(Event event) async {
+    try {
+      if (event.id == null) {
+        emit(EventError('ID do evento é inválido'));
+        return;
+      }
 
-    final model = EventsEntity(id: event.id, name: event.name);
+      final model = EventsEntity(
+        id: event.id!,
+        name: event.name,
+      );
 
-    await dao.insertEvent(model);
-
-     emit(OnEventSelected());
+      await _eventsDao.insertEvent(model);
+      emit(OnEventSelected());
+    } catch (e) {
+      emit(EventError('Erro ao selecionar evento: $e'));
+    }
   }
 }

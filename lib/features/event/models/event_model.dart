@@ -10,7 +10,7 @@ class Event {
   });
 
   factory Event.fromJson(Map<String, dynamic> data) => Event(
-        id: data['id'],
+        id: data['id'] ?? 0,
         name: data['attributes']['name'],
         whitelabel: data['attributes']?['whitelabel']?['data']?['id'] ?? 0,
       );

@@ -73,7 +73,7 @@ class RaffleCubit extends Cubit<RaffleState> {
       await customerDao.updateCustomerSorted(sorteado.id!);
 
       // emit(RaffleSuccess(winnerName: sorteado.name));
-      // await Future.delayed(const Duration(seconds: 20));
+      // await Future.delayed(const Duration(seconds: 1));
 
       emit(
         RaffleShowWinner(

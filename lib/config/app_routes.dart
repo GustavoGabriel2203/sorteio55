@@ -30,15 +30,11 @@ class AppRoutes {
 
       case event:
         final args = settings.arguments as Map<String, dynamic>;
-        final whitelabelId = args['whitelabelId'] as int;
-        final whitelabelName = args['whitelabelName'] as String;
-
         return MaterialPageRoute(
-          builder:
-              (_) => EventPage(
-                whitelabelId: whitelabelId,
-                whitelabelName: whitelabelName,
-              ),
+          builder: (_) => EventPage(
+            whitelabelId: args['whitelabelId'] as int,
+            whitelabelName: args['whitelabelName'] as String,
+          ),
         );
 
       case register:
@@ -57,8 +53,7 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const RafflePage());
 
       case raffleLoading:
-        return MaterialPageRoute(
-          builder: (_) => RaffleLoadingPage());
+        return MaterialPageRoute(builder: (_) => RaffleLoadingPage());
 
       default:
         return MaterialPageRoute(

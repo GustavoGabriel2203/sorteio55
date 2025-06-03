@@ -1,26 +1,1 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-InputDecoration inputDecoration(String label) {
-  return InputDecoration(
-    labelText: label,
-    labelStyle: TextStyle(
-      color: Colors.white,
-      fontSize: 16.sp,
-    ),
-    floatingLabelBehavior: FloatingLabelBehavior.always,
-    filled: true,
-    fillColor: const Color(0xFF2C2C2C), 
-    enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.white),
-      borderRadius: BorderRadius.circular(12.r),
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderSide: const BorderSide(color: Colors.green, width: 1.5),
-      borderRadius: BorderRadius.circular(12.r),
-    ),
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12.r),
-    ),
-  );
-}
+import 'package:flutter/material.dart';import 'package:flutter_screenutil/flutter_screenutil.dart';InputDecoration inputDecoration(String label) {  return InputDecoration(    labelText: label,    labelStyle: TextStyle(      color: Colors.white,      fontSize: 18.sp,     ),    floatingLabelBehavior: FloatingLabelBehavior.always,    filled: true,    fillColor: const Color(0xFF2C2C2C),    contentPadding: EdgeInsets.symmetric(      horizontal: 20.w,      vertical: 20.h,     ),    enabledBorder: OutlineInputBorder(      borderSide: BorderSide(color: Colors.white, width: 1.2),       borderRadius: BorderRadius.circular(12.r),    ),    focusedBorder: OutlineInputBorder(      borderSide: BorderSide(color: Colors.green, width: 2.w),       borderRadius: BorderRadius.circular(12.r),    ),    border: OutlineInputBorder(      borderRadius: BorderRadius.circular(12.r),    ),    isDense: false,   );}
