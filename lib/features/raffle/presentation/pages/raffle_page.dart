@@ -24,19 +24,23 @@ class _RafflePageState extends State<RafflePage> {
   }
 
   void showSnack(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          message,
-          style: TextStyle(color: Colors.white, fontSize: 14.sp),
-          textAlign: TextAlign.center,
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar() 
+      ..showSnackBar(
+        SnackBar(
+          content: Text(
+            message,
+            style: TextStyle(color: Colors.white, fontSize: 14.sp),
+            textAlign: TextAlign.center,
+          ),
+          backgroundColor: Colors.black87,
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 2), 
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+          elevation: 3,
+          margin: EdgeInsets.all(16.w), 
         ),
-        backgroundColor: Colors.black87,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
-        elevation: 3,
-      ),
-    );
+      );
   }
 
   @override
@@ -71,15 +75,6 @@ class _RafflePageState extends State<RafflePage> {
               showSnack(context, 'Participantes removidos com sucesso.');
             } else if (state is RaffleError) {
               showSnack(context, state.message);
-            } else if (state is RaffleShowWinner) {
-              Navigator.pushNamed(
-                context,
-                AppRoutes.raffleLoading,
-                arguments: {
-                  'name': state.winnerName,
-                  'phone': state.winnerPhone,
-                },
-              );
             }
           },
           builder: (context, state) {
@@ -143,7 +138,7 @@ class _RafflePageState extends State<RafflePage> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton.icon(
-                        onPressed: () => context.read<RaffleCubit>().sortear(),
+                        onPressed: () => Navigator.pushNamed(context, AppRoutes.raffleLoading),
                         icon: Icon(Icons.casino, color: Colors.white, size: 20.sp),
                         label: Text(
                           'Sortear participante',

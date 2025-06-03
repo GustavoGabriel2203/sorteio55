@@ -23,23 +23,33 @@ class RaffleCubit extends Cubit<RaffleState> {
     emit(RaffleSyncing());
 
     try {
-      final whitelabel = await whitelabelDao.getLastWhitelabel();
-      if (whitelabel == null) {
-        emit(RaffleError('Evento não encontrado.'));
+      final event = await eventsDao.getCurrentEvent();
+      if (event == null) {
+        emit(RaffleError('Evento não encontrado no banco de dados.'));
         return;
       }
 
-      final eventId = whitelabel.whitelabelId;
+      final eventId = event.id;
+      print('📌 Sincronizando participantes do evento ID: $eventId');
+
       final remoteList = await participantsRepository.getParticipants(eventId);
+      print('🔎 Participantes encontrados na API: ${remoteList.length}');
 
       for (final p in remoteList) {
         final exists = await customerDao.validateIfCustomerAlreadyExists(
           p.email,
-          p.event,
+          eventId,
         );
+
         if (exists == null) {
-          final syncedCustomer = p.copyWith(sync: 1);
+          final syncedCustomer = p.copyWith(
+            sync: 1,
+            event: eventId, // ✅ Usa ID da tabela events, como você quer
+          );
           await customerDao.insertCustomer(syncedCustomer);
+          print('✅ Inserido: ${syncedCustomer.name} - ${syncedCustomer.email}');
+        } else {
+          print('ℹ️ Já existe: ${p.email}');
         }
       }
 
@@ -53,13 +63,13 @@ class RaffleCubit extends Cubit<RaffleState> {
     emit(RaffleLoading());
 
     try {
-      final whitelabel = await whitelabelDao.getLastWhitelabel();
-      if (whitelabel == null) {
+      final event = await eventsDao.getCurrentEvent();
+      if (event == null) {
         emit(RaffleError('Evento não encontrado.'));
         return;
       }
 
-      final eventId = whitelabel.whitelabelId;
+      final eventId = event.id;
       final all = await customerDao.getAllCustomers();
       final unsorted =
           all.where((c) => c.sorted == 0 && c.event == eventId).toList();
@@ -71,9 +81,6 @@ class RaffleCubit extends Cubit<RaffleState> {
 
       final sorteado = unsorted[Random().nextInt(unsorted.length)];
       await customerDao.updateCustomerSorted(sorteado.id!);
-
-      // emit(RaffleSuccess(winnerName: sorteado.name));
-      // await Future.delayed(const Duration(seconds: 1));
 
       emit(
         RaffleShowWinner(
@@ -93,5 +100,21 @@ class RaffleCubit extends Cubit<RaffleState> {
     } catch (e) {
       emit(RaffleError('Erro ao limpar participantes: $e'));
     }
+  }
+
+
+
+  // verificar se tem participantes para sortear
+
+  Future<bool> hasParticipantsToSort() async {
+    final event = await eventsDao.getCurrentEvent();
+    if (event == null) return false;
+
+    final eventId = event.id;
+    final all = await customerDao.getAllCustomers();
+    final unsorted =
+        all.where((c) => c.sorted == 0 && c.event == eventId).toList();
+
+    return unsorted.isNotEmpty;
   }
 }

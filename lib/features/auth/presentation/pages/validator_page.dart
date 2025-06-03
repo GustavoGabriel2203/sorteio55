@@ -45,99 +45,102 @@ class _ValidatorPageState extends State<ValidatorPage> {
       ),
     );
 
-    return Scaffold(
-      body: SafeArea(
-        child: BlocConsumer<AuthCubit, AuthState>(
-          listener: (context, state) {
-            if (state is AuthSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.message)),
-              );
-              codeController.clear();
+    return PopScope(
+      canPop: false, 
+      child: Scaffold(
+        body: SafeArea(
+          child: BlocConsumer<AuthCubit, AuthState>(
+            listener: (context, state) {
+              if (state is AuthSuccess) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(state.message)),
+                );
+                codeController.clear();
 
-              Navigator.pushReplacementNamed(
-                context,
-                AppRoutes.event,
-                arguments: {
-                  'whitelabelId': state.whitelabel.id,
-                  'whitelabelName': state.whitelabel.name,
-                },
-              );
-            }
+                Navigator.pushReplacementNamed(
+                  context,
+                  AppRoutes.event,
+                  arguments: {
+                    'whitelabelId': state.whitelabel.id,
+                    'whitelabelName': state.whitelabel.name,
+                  },
+                );
+              }
 
-            if (state is AuthError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: Colors.red,
-                ),
-              );
-              codeController.clear();
-            }
-          },
-          builder: (context, state) {
-            return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 32.h),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(height: 60.h),
-                  Text(
-                    'Verificação',
-                    style: TextStyle(
-                      fontSize: 50.sp,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Oswald',
-                      letterSpacing: 1.2,
+              if (state is AuthError) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(state.message),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                codeController.clear();
+              }
+            },
+            builder: (context, state) {
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 32.h),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 60.h),
+                    Text(
+                      'Verificação',
+                      style: TextStyle(
+                        fontSize: 50.sp,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Oswald',
+                        letterSpacing: 1.2,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 12.h),
-                  Text(
-                    'Digite o seu código de verificação',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 15.sp,
-                      color: Colors.white70,
+                    SizedBox(height: 12.h),
+                    Text(
+                      'Digite o seu código de verificação',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 15.sp,
+                        color: Colors.white70,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 36.h),
-                  Pinput(
-                    controller: codeController,
-                    length: 6,
-                    defaultPinTheme: defaultPinTheme,
-                    focusedPinTheme: focusedPinTheme,
-                    keyboardType: TextInputType.number,
-                    animationDuration: const Duration(milliseconds: 200),
-                    showCursor: true,
-                  ),
-                  SizedBox(height: 40.h),
-                  if (state is AuthLoading)
-                    const CircularProgressIndicator()
-                  else
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          final code = codeController.text.trim();
-                          if (code.isNotEmpty) {
-                            context.read<AuthCubit>().validateAccessCode(code);
-                          }
-                        },
-                        icon: const Icon(Icons.lock_outline),
-                        label: Text(
-                          'Validar',
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.bold,
+                    SizedBox(height: 36.h),
+                    Pinput(
+                      controller: codeController,
+                      length: 6,
+                      defaultPinTheme: defaultPinTheme,
+                      focusedPinTheme: focusedPinTheme,
+                      keyboardType: TextInputType.number,
+                      animationDuration: const Duration(milliseconds: 200),
+                      showCursor: true,
+                    ),
+                    SizedBox(height: 40.h),
+                    if (state is AuthLoading)
+                      const CircularProgressIndicator()
+                    else
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            final code = codeController.text.trim();
+                            if (code.isNotEmpty) {
+                              context.read<AuthCubit>().validateAccessCode(code);
+                            }
+                          },
+                          icon: const Icon(Icons.lock_outline),
+                          label: Text(
+                            'Validar',
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  SizedBox(height: 60.h),
-                ],
-              ),
-            );
-          },
+                    SizedBox(height: 60.h),
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

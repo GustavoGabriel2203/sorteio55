@@ -66,7 +66,7 @@ Future<void> setupLocator() async {
   );
 
   // PARTICIPANTS
-  getIt.registerLazySingleton<ParticipantService>(() => ParticipantService());
+  getIt.registerLazySingleton<ParticipantService>(() => ParticipantService( ));
   getIt.registerLazySingleton<ParticipantsRepository>(
     () => ParticipantsRepositoryImpl(getIt<ParticipantService>()),
   );

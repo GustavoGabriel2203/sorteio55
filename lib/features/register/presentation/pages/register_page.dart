@@ -110,7 +110,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           onChanged: (value) => user.name = value,
                           validator: validator.byField(user, 'name'),
                           decoration: inputDecoration('Nome'),
-                          style: const TextStyle(color: Colors.white),
+                          style:  TextStyle(color: Colors.white, fontSize: 20.w),
                         ),
                         SizedBox(height: 16.h),
                         TextFormField(
@@ -118,7 +118,8 @@ class _RegisterPageState extends State<RegisterPage> {
                           onChanged: (value) => user.email = value,
                           validator: validator.byField(user, 'email'),
                           decoration: inputDecoration('Email'),
-                          style: const TextStyle(color: Colors.white),
+                          style:  TextStyle(color: Colors.white, fontSize: 20.w),
+                          keyboardType: TextInputType.emailAddress,
                         ),
                         SizedBox(height: 16.h),
                         TextFormField(
@@ -127,7 +128,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           inputFormatters: [mask],
                           validator: validator.byField(user, 'phone'),
                           decoration: inputDecoration('Telefone'),
-                          style: const TextStyle(color: Colors.white),
+                          style:  TextStyle(color: Colors.white, fontSize: 20.w),
                           keyboardType: TextInputType.number,
                         ),
                         SizedBox(height: 24.h),
