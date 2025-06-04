@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sorteio_55_tech/core/database/dao/events_dao.dart';
-
 import 'package:sorteio_55_tech/core/services/service_locator.dart';
 import 'package:sorteio_55_tech/features/participants/presentation/cubit/participants_cubit.dart';
 import 'package:sorteio_55_tech/features/participants/presentation/cubit/participants_state.dart';
@@ -15,7 +14,6 @@ class ParticipantsPage extends StatefulWidget {
 }
 
 class _ParticipantsPageState extends State<ParticipantsPage> {
-  int? eventId;
   final ParticipantsCubit participantsCubit = getIt<ParticipantsCubit>();
 
   @override
@@ -30,7 +28,7 @@ class _ParticipantsPageState extends State<ParticipantsPage> {
       participantsCubit.fetchParticipants(model.id ?? 0);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Nenhum  Participante Encontrado.')),
+        const SnackBar(content: Text('Nenhum Participante Encontrado.')),
       );
     }
   }
@@ -57,7 +55,6 @@ class _ParticipantsPageState extends State<ParticipantsPage> {
             ),
           ),
           centerTitle: true,
-          backgroundColor: Colors.green.shade600,
           elevation: 0,
           iconTheme: const IconThemeData(color: Colors.white),
         ),
@@ -85,80 +82,10 @@ class _ParticipantsPageState extends State<ParticipantsPage> {
                 separatorBuilder: (_, __) => SizedBox(height: 14.h),
                 itemBuilder: (context, index) {
                   final participant = list[index];
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF2A2A2A),
-                      borderRadius: BorderRadius.circular(12.r),
-                      border: Border.all(
-                        color: Colors.green.shade700,
-                        width: 1.w,
-                      ),
-                    ),
-                    padding: EdgeInsets.symmetric(
-                      vertical: 16.h,
-                      horizontal: 20.w,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.person,
-                              color: Colors.green.shade300,
-                              size: 24.sp,
-                            ),
-                            SizedBox(width: 8.w),
-                            Expanded(
-                              child: Text(
-                                participant.name,
-                                style: TextStyle(
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.green.shade300,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 12.h),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.phone,
-                              color: Colors.white70,
-                              size: 16.sp,
-                            ),
-                            SizedBox(width: 8.w),
-                            Text(
-                              participant.phone,
-                              style: TextStyle(
-                                fontSize: 14.sp,
-                                color: Colors.white70,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 4.h),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.email,
-                              color: Colors.white70,
-                              size: 16.sp,
-                            ),
-                            SizedBox(width: 8.w),
-                            Text(
-                              participant.email,
-                              style: TextStyle(
-                                fontSize: 14.sp,
-                                color: Colors.white70,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                  return ParticipantCard(
+                    name: participant.name,
+                    phone: participant.phone,
+                    email: participant.email,
                   );
                 },
               );
@@ -171,15 +98,73 @@ class _ParticipantsPageState extends State<ParticipantsPage> {
               );
             }
 
-            return const Center(
+            return Center(
               child: Text(
-                'Erro desconhecido',
-                style: TextStyle(color: Colors.red, fontSize: 16),
+                'Erro desconhecido.',
+                style: TextStyle(color: Colors.red, fontSize: 16.sp),
               ),
             );
           },
         ),
       ),
+    );
+  }
+}
+
+class ParticipantCard extends StatelessWidget {
+  final String name;
+  final String phone;
+  final String email;
+
+  const ParticipantCard({
+    required this.name,
+    required this.phone,
+    required this.email,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 6.h),
+      padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
+      decoration: BoxDecoration(
+        color: const Color(0xFF2A2A2A),
+        borderRadius: BorderRadius.circular(12.r),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _participantInfoRow(Icons.person, name, isTitle: true),
+          SizedBox(height: 8.h),
+          _participantInfoRow(Icons.phone, phone),
+          SizedBox(height: 4.h),
+          _participantInfoRow(Icons.email, email),
+        ],
+      ),
+    );
+  }
+
+  Widget _participantInfoRow(IconData icon, String text, {bool isTitle = false}) {
+    return Row(
+      children: [
+        Icon(
+          icon,
+          color: isTitle ? Colors.green.shade400 : Colors.white70,
+          size: isTitle ? 20.sp : 16.sp,
+        ),
+        SizedBox(width: 8.w),
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(
+              fontSize: isTitle ? 16.sp : 14.sp,
+              fontWeight: isTitle ? FontWeight.w600 : FontWeight.normal,
+              color: isTitle ? Colors.green.shade400 : Colors.white70,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

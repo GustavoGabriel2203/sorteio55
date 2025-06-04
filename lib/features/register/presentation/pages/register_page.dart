@@ -68,11 +68,11 @@ class _RegisterPageState extends State<RegisterPage> {
         appBar: AppBar(
           iconTheme: const IconThemeData(color: Colors.white),
           backgroundColor: const Color(0xFF1E1E1E),
-          title: const Text(
-            'Cadastro de Participantes',
-            style: TextStyle(color: Colors.white),
-          ),
-          centerTitle: true,
+          // title: const Text(
+          //   'Cadastro de Participantes',
+          //   style: TextStyle(color: Colors.white),
+          // ),
+          // centerTitle: true,
         ),
         body: BlocConsumer<RegisterCubit, RegisterState>(
           listener: (context, state) {
@@ -97,7 +97,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          'Realize seu cadastro',
+                          'Cadastre-se',
                           style: TextStyle(
                             color: Colors.white,
                             fontFamily: 'Bebas',
@@ -154,6 +154,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 16.sp,
+                                      fontWeight: FontWeight.bold
                                     ),
                                   ),
                           ),

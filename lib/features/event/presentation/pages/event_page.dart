@@ -91,12 +91,13 @@ class _EventPageState extends State<EventPage> {
                       'Olá, ${widget.whitelabelName}!',
                       style: theme.textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
+                        fontSize: 28.sp,
                       ),
                     ),
                     SizedBox(height: 8.h),
                     Text(
                       'Escolha o evento que você deseja participar:',
-                      style: theme.textTheme.bodyLarge?.copyWith(fontSize: 16.sp),
+                      style: theme.textTheme.bodyLarge?.copyWith(fontSize: 16.sp, color: Colors.white70), 
                     ),
                     SizedBox(height: 24.h),
                     Expanded(
@@ -140,35 +141,53 @@ class _EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: const Color(0xFF66BB6A),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
-      elevation: 4,
-      child: InkWell(
+    final theme = Theme.of(context);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFF1C1C1E), // Fundo escuro
         borderRadius: BorderRadius.circular(16.r),
-        onTap: onTap,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                name,
-                style: TextStyle(
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Nome do evento e data (estático no seu código, pode ser dinâmico)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    color: Colors.white,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 4.h),
+              ],
+            ),
+
+            // Botão verde
+            ElevatedButton(
+              onPressed: onTap,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF4CAF50), // Verde
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
+              ),
+              child: Text(
+                'Visualizar',
+                style: theme.textTheme.labelLarge?.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 20.sp,
                 ),
-                textAlign: TextAlign.center,
               ),
-              SizedBox(height: 12.h),
-              Text(
-                'Toque para continuar',
-                style: TextStyle(color: Colors.white70, fontSize: 14.sp),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

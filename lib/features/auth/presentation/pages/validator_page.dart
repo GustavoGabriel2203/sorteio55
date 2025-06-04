@@ -46,15 +46,15 @@ class _ValidatorPageState extends State<ValidatorPage> {
     );
 
     return PopScope(
-      canPop: false, 
+      canPop: false,
       child: Scaffold(
         body: SafeArea(
           child: BlocConsumer<AuthCubit, AuthState>(
             listener: (context, state) {
               if (state is AuthSuccess) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.message)),
-                );
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text(state.message)));
                 codeController.clear();
 
                 Navigator.pushReplacementNamed(
@@ -83,11 +83,17 @@ class _ValidatorPageState extends State<ValidatorPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(height: 60.h),
+                    Image.asset(
+                      'assets/images/shield.png',
+                      width: 120.w,
+                      height: 120.h,
+                    ),
+
                     Text(
-                      'Verificação',
+                      'Código de verificação',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 50.sp,
+                        fontSize: 25.sp,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Oswald',
                         letterSpacing: 1.2,
@@ -95,12 +101,9 @@ class _ValidatorPageState extends State<ValidatorPage> {
                     ),
                     SizedBox(height: 12.h),
                     Text(
-                      'Digite o seu código de verificação',
+                      'Insira o seu código de verificação!',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 15.sp,
-                        color: Colors.white70,
-                      ),
+                      style: TextStyle(fontSize: 15.sp, color: Colors.white70),
                     ),
                     SizedBox(height: 36.h),
                     Pinput(
@@ -122,12 +125,13 @@ class _ValidatorPageState extends State<ValidatorPage> {
                           onPressed: () {
                             final code = codeController.text.trim();
                             if (code.isNotEmpty) {
-                              context.read<AuthCubit>().validateAccessCode(code);
+                              context.read<AuthCubit>().validateAccessCode(
+                                code,
+                              );
                             }
                           },
-                          icon: const Icon(Icons.lock_outline),
                           label: Text(
-                            'Validar',
+                            'Verificar',
                             style: TextStyle(
                               fontSize: 16.sp,
                               fontWeight: FontWeight.bold,
