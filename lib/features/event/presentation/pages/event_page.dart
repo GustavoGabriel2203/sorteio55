@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:sorteio_55_tech/config/app_routes.dart';
+import 'package:sorteio_55_tech/config/theme_colors.dart';
+import 'package:sorteio_55_tech/core/database/dao/customer_dao.dart';
+import 'package:sorteio_55_tech/core/database/dao/events_dao.dart';
+import 'package:sorteio_55_tech/core/database/dao/whitelabel_dao.dart';
 import 'package:sorteio_55_tech/core/services/service_locator.dart';
 import 'package:sorteio_55_tech/features/event/presentation/cubit/event_cubit.dart';
 import 'package:sorteio_55_tech/features/event/presentation/cubit/event_state.dart';
+import 'package:sorteio_55_tech/shared/widgets/app_logo.dart';
 
 class EventPage extends StatefulWidget {
   final int whitelabelId;
@@ -38,10 +44,18 @@ class _EventPageState extends State<EventPage> {
       value: _eventCubit,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Eventos'),
+          centerTitle: true,
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [AppLogo()],
+          ),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: () {
+            onPressed: () async {
+              await getIt<EventsDao>().clear();
+              await getIt<WhitelabelDao>().clear();
+              await getIt<CustomerDao>().clearDatabase();
+
               Navigator.of(
                 context,
               ).pushNamedAndRemoveUntil(AppRoutes.validator, (route) => false);
@@ -49,6 +63,11 @@ class _EventPageState extends State<EventPage> {
           ),
         ),
         body: BlocConsumer<EventCubit, EventState>(
+          listener: (context, state) {
+            if (state is OnEventSelected) {
+              Navigator.pushReplacementNamed(context, AppRoutes.menu);
+            }
+          },
           builder: (context, state) {
             if (state is EventLoading) {
               return const Center(child: CircularProgressIndicator());
@@ -77,7 +96,9 @@ class _EventPageState extends State<EventPage> {
                 return Center(
                   child: Text(
                     'Nenhum evento disponível.',
-                    style: theme.textTheme.bodyMedium?.copyWith(fontSize: 16.sp),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontSize: 16.sp,
+                    ),
                   ),
                 );
               }
@@ -97,7 +118,10 @@ class _EventPageState extends State<EventPage> {
                     SizedBox(height: 8.h),
                     Text(
                       'Escolha o evento que você deseja participar:',
-                      style: theme.textTheme.bodyLarge?.copyWith(fontSize: 16.sp, color: Colors.white70), 
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        fontSize: 16.sp,
+                        color: Colors.white70,
+                      ),
                     ),
                     SizedBox(height: 24.h),
                     Expanded(
@@ -122,11 +146,6 @@ class _EventPageState extends State<EventPage> {
 
             return const SizedBox();
           },
-          listener: (BuildContext context, EventState state) {
-            if (state is OnEventSelected) {
-              Navigator.pushReplacementNamed(context, AppRoutes.menu);
-            }
-          },
         ),
       ),
     );
@@ -145,7 +164,7 @@ class _EventCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF1C1C1E), // Fundo escuro
+        color: const Color(0xFF1C1C1E),
         borderRadius: BorderRadius.circular(16.r),
       ),
       child: Padding(
@@ -153,7 +172,6 @@ class _EventCard extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Nome do evento e data (estático no seu código, pode ser dinâmico)
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -168,12 +186,10 @@ class _EventCard extends StatelessWidget {
                 SizedBox(height: 4.h),
               ],
             ),
-
-            // Botão verde
             ElevatedButton(
               onPressed: onTap,
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF4CAF50), // Verde
+                backgroundColor: AppColors.afinzAccent,
                 padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.r),

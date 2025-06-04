@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MenuButton extends StatelessWidget {
   final String label;
-  final Future<void> Function()? onPressed;
+  final  VoidCallback? onPressed;
 
   const MenuButton({
     super.key,
@@ -29,11 +29,7 @@ class MenuButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(16.r),
             ),
           ),
-          onPressed: () {
-            if (onPressed != null) {
-              onPressed!();
-            }
-          },
+          onPressed: onPressed,
           child: Text(label),
         ),
       ),

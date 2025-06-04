@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sorteio_55_tech/config/theme_colors.dart';
 InputDecoration inputDecoration(String label) {
   return InputDecoration(
     hintText: label,
@@ -18,7 +19,7 @@ InputDecoration inputDecoration(String label) {
       borderRadius: BorderRadius.circular(12.r),
     ),
     focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.green, width: 1.5.w),
+      borderSide: BorderSide(color: AppColors.afinzAccent, width: 1.5.w),
       borderRadius: BorderRadius.circular(12.r),
     ),
     errorBorder: OutlineInputBorder(

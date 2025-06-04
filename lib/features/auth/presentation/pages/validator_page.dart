@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pinput/pinput.dart';
+
 import 'package:sorteio_55_tech/config/app_routes.dart';
 import 'package:sorteio_55_tech/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:sorteio_55_tech/features/auth/presentation/cubit/auth_state.dart';
+import 'package:sorteio_55_tech/shared/widgets/app_logo.dart';
 
 class ValidatorPage extends StatefulWidget {
   const ValidatorPage({super.key});
@@ -48,13 +50,22 @@ class _ValidatorPageState extends State<ValidatorPage> {
     return PopScope(
       canPop: false,
       child: Scaffold(
+        backgroundColor: const Color(0xFF1E1E1E),
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          backgroundColor: const Color(0xFF1E1E1E),
+          elevation: 0,
+          title: const AppLogo( 
+           ),
+        ),
         body: SafeArea(
           child: BlocConsumer<AuthCubit, AuthState>(
             listener: (context, state) {
               if (state is AuthSuccess) {
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text(state.message)));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(state.message)),
+                );
                 codeController.clear();
 
                 Navigator.pushReplacementNamed(
@@ -78,69 +89,71 @@ class _ValidatorPageState extends State<ValidatorPage> {
               }
             },
             builder: (context, state) {
-              return Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 32.h),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/images/shield.png',
-                      width: 120.w,
-                      height: 120.h,
-                    ),
-
-                    Text(
-                      'Código de verificação',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 25.sp,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Oswald',
-                        letterSpacing: 1.2,
+              return Center(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 32.h),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/images/shieldAfinz.png',
+                        width: 120.w,
+                        height: 120.h,
+                        fit: BoxFit.contain,
                       ),
-                    ),
-                    SizedBox(height: 12.h),
-                    Text(
-                      'Insira o seu código de verificação!',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 15.sp, color: Colors.white70),
-                    ),
-                    SizedBox(height: 36.h),
-                    Pinput(
-                      controller: codeController,
-                      length: 6,
-                      defaultPinTheme: defaultPinTheme,
-                      focusedPinTheme: focusedPinTheme,
-                      keyboardType: TextInputType.number,
-                      animationDuration: const Duration(milliseconds: 200),
-                      showCursor: true,
-                    ),
-                    SizedBox(height: 40.h),
-                    if (state is AuthLoading)
-                      const CircularProgressIndicator()
-                    else
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton.icon(
-                          onPressed: () {
-                            final code = codeController.text.trim();
-                            if (code.isNotEmpty) {
-                              context.read<AuthCubit>().validateAccessCode(
-                                code,
-                              );
-                            }
-                          },
-                          label: Text(
-                            'Verificar',
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.bold,
+                      SizedBox(height: 24.h),
+                      Text(
+                        'Código de verificação',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 25.sp,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Oswald',
+                          letterSpacing: 1.2,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(height: 12.h),
+                      Text(
+                        'Insira o seu código de verificação!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 15.sp, color: Colors.white70),
+                      ),
+                      SizedBox(height: 36.h),
+                      Pinput(
+                        controller: codeController,
+                        length: 6,
+                        defaultPinTheme: defaultPinTheme,
+                        focusedPinTheme: focusedPinTheme,
+                        keyboardType: TextInputType.number,
+                        animationDuration: const Duration(milliseconds: 200),
+                        showCursor: true,
+                      ),
+                      SizedBox(height: 40.h),
+                      if (state is AuthLoading)
+                        const CircularProgressIndicator()
+                      else
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
+                            onPressed: () {
+                              final code = codeController.text.trim();
+                              if (code.isNotEmpty) {
+                                context.read<AuthCubit>().validateAccessCode(code);
+                              }
+                            },
+                            label: Text(
+                              'Verificar',
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    SizedBox(height: 60.h),
-                  ],
+                      SizedBox(height: 60.h),
+                    ],
+                  ),
                 ),
               );
             },

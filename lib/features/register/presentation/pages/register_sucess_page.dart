@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
+import 'package:sorteio_55_tech/config/theme_colors.dart';
 
 class RegisterSuccessPage extends StatefulWidget {
   const RegisterSuccessPage({super.key});
@@ -33,7 +34,7 @@ class _RegisterSuccessPageState extends State<RegisterSuccessPage> {
               Lottie.asset(
                 'assets/lottie/success.json',
                 height: 200.h,
-                repeat: true,
+                repeat: false,
               ),
               SizedBox(height: 32.h),
               Text(
@@ -49,7 +50,7 @@ class _RegisterSuccessPageState extends State<RegisterSuccessPage> {
               ElevatedButton(
                 onPressed: () => Navigator.pop(context),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
+                  backgroundColor: AppColors.afinzAccent,
                   padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 24.w),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.r),

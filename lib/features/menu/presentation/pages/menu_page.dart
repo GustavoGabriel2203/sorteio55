@@ -3,12 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:sorteio_55_tech/config/app_routes.dart';
+import 'package:sorteio_55_tech/config/theme_colors.dart';
 import 'package:sorteio_55_tech/core/database/dao/customer_dao.dart';
 import 'package:sorteio_55_tech/core/database/dao/events_dao.dart';
 import 'package:sorteio_55_tech/core/database/dao/whitelabel_dao.dart';
 import 'package:sorteio_55_tech/core/services/service_locator.dart';
 import 'package:sorteio_55_tech/features/menu/presentation/cubit/menu_cubit.dart';
 import 'package:sorteio_55_tech/features/menu/presentation/widgets/menu_buttom.dart';
+import 'package:sorteio_55_tech/shared/widgets/app_logo.dart';
 
 class MenuPage extends StatelessWidget {
   const MenuPage({super.key});
@@ -21,13 +23,10 @@ class MenuPage extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: [
             const DrawerHeader(
-              decoration: BoxDecoration(color: Colors.green),
+              decoration: BoxDecoration(color: AppColors.afinzAccent),
               child: Text(
                 'Opções Avançadas',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                ),
+                style: TextStyle(color: Colors.white, fontSize: 20),
               ),
             ),
             ListTile(
@@ -40,7 +39,8 @@ class MenuPage extends StatelessWidget {
                   builder: (context) => AlertDialog(
                     title: const Text('Confirmar'),
                     content: const Text(
-                        'Deseja realmente apagar todos os participantes?'),
+                      'Deseja realmente apagar todos os participantes?',
+                    ),
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.pop(context, false),
@@ -71,8 +71,15 @@ class MenuPage extends StatelessWidget {
         ),
       ),
       appBar: AppBar(
-        // title: const TexMenu'),
         centerTitle: true,
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+           AppLogo(
+              
+            ),
+          ],
+        ),
       ),
       body: SafeArea(
         child: Center(
@@ -84,7 +91,7 @@ class MenuPage extends StatelessWidget {
                 Text(
                   'Menu',
                   style: TextStyle(
-                    fontSize: 80.sp,
+                    fontSize: 70.sp,
                     fontFamily: 'Bebas',
                     fontWeight: FontWeight.bold,
                   ),
@@ -94,14 +101,14 @@ class MenuPage extends StatelessWidget {
 
                 /// Botões principais
                 MenuButton(
-                  label: 'Cadastrar Participantes', 
-                  onPressed: () async {
+                  label: 'Cadastrar Participantes',
+                  onPressed: () {
                     Navigator.pushNamed(context, AppRoutes.register);
                   },
                 ),
                 MenuButton(
                   label: 'Lista de Participantes',
-                  onPressed: () async {
+                  onPressed: () {
                     Navigator.pushNamed(context, AppRoutes.participants);
                   },
                 ),
@@ -112,7 +119,9 @@ class MenuPage extends StatelessWidget {
                     if (state is MenuSuccess) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('Participantes sincronizados com sucesso'),
+                          content: Text(
+                            'Participantes sincronizados com sucesso',
+                          ),
                         ),
                       );
                     } else if (state is MenuFailure) {
@@ -127,17 +136,17 @@ class MenuPage extends StatelessWidget {
                       label: state is MenuLoading
                           ? 'Sincronizando...'
                           : 'Sincronizar Participantes',
-                     onPressed: state is MenuLoading ? null : () => cubit.syncParticipants(),
-
+                      onPressed: state is MenuLoading
+                          ? null
+                          : () => cubit.syncParticipants(),
                     );
                   },
                 ),
 
                 MenuButton(
                   label: 'Realizar Sorteio',
-                  onPressed: () async {
-                    Navigator.pushNamed(context, AppRoutes.raffleLoading);
-                  },
+                  onPressed: () =>
+                      Navigator.pushNamed(context, AppRoutes.raffleLoading),
                 ),
                 MenuButton(
                   label: 'Sair',

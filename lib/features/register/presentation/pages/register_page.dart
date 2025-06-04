@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:sorteio_55_tech/config/theme_colors.dart';
 
 import 'package:sorteio_55_tech/core/database/dao/events_dao.dart';
 import 'package:sorteio_55_tech/core/services/service_locator.dart';
@@ -10,6 +11,7 @@ import 'package:sorteio_55_tech/features/register/data/models/customer_model.dar
 import 'package:sorteio_55_tech/features/register/presentation/cubit/register_cubit.dart';
 import 'package:sorteio_55_tech/features/register/presentation/cubit/register_state.dart';
 import 'package:sorteio_55_tech/features/register/presentation/widgets/decorationtextfield.dart';
+import 'package:sorteio_55_tech/shared/widgets/app_logo.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -61,8 +63,13 @@ class _RegisterPageState extends State<RegisterPage> {
       child: Scaffold(
         backgroundColor: const Color(0xFF1E1E1E),
         appBar: AppBar(
-          iconTheme: const IconThemeData(color: Colors.white),
+          centerTitle: true,
           backgroundColor: const Color(0xFF1E1E1E),
+          iconTheme: const IconThemeData(
+            color: Color(0xFF1E1E1E), // mesma cor do fundo para esconder
+          ),
+          title: AppLogo(),
+          elevation: 0,
         ),
         body: BlocConsumer<RegisterCubit, RegisterState>(
           listener: (context, state) {
@@ -153,7 +160,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           width: double.infinity,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green,
+                              backgroundColor: AppColors.afinzAccent,
                               padding: EdgeInsets.symmetric(vertical: 16.h),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.r),

@@ -102,9 +102,9 @@ class _RaffleLoadingPageState extends State<RaffleLoadingPage> {
               alignment: Alignment.center,
               children: [
                 Lottie.asset(
-                  'assets/lottie/raffleAnimation.json',
+                  'assets/lottie/confetti.json',
                   repeat: true,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.contain,
                   width: double.infinity,
                   height: double.infinity,
                 ),
