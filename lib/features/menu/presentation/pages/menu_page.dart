@@ -94,7 +94,7 @@ class MenuPage extends StatelessWidget {
 
                 /// Botões principais
                 MenuButton(
-                  label: 'Cadastrar Participantes',
+                  label: 'Cadastrar Participantes', 
                   onPressed: () async {
                     Navigator.pushNamed(context, AppRoutes.register);
                   },
