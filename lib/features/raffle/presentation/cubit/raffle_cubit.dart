@@ -72,4 +72,9 @@ class RaffleCubit extends Cubit<RaffleState> {
 
     return unsorted.isNotEmpty;
   }
+
+  
+  
+
 }
+

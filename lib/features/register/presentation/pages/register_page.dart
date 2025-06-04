@@ -65,9 +65,7 @@ class _RegisterPageState extends State<RegisterPage> {
         appBar: AppBar(
           centerTitle: true,
           backgroundColor: const Color(0xFF1E1E1E),
-          iconTheme: const IconThemeData(
-            color: Color(0xFF1E1E1E), // mesma cor do fundo para esconder
-          ),
+          iconTheme: const IconThemeData(color: Color(0xFF1E1E1E)),
           title: AppLogo(),
           elevation: 0,
         ),
@@ -85,9 +83,9 @@ class _RegisterPageState extends State<RegisterPage> {
           builder: (context, state) {
             return Center(
               child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 32.h),
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: 400.w),
+                  constraints: BoxConstraints(maxWidth: 300.w),
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -98,12 +96,12 @@ class _RegisterPageState extends State<RegisterPage> {
                           style: TextStyle(
                             color: Colors.white,
                             fontFamily: 'Bebas',
-                            fontSize: 40.sp,
+                            fontSize: 16.sp,
                           ),
                         ),
-                        SizedBox(height: 35.h),
+                        SizedBox(height: 20.h),
 
-                        // Campo: Nome
+                        // Nome
                         TextFormField(
                           controller: nameController,
                           validator:
@@ -119,11 +117,14 @@ class _RegisterPageState extends State<RegisterPage> {
                                   )
                                   .build(),
                           decoration: inputDecoration('Nome'),
-                          style: TextStyle(color: Colors.white, fontSize: 20.w),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14.sp,
+                          ),
                         ),
-                        SizedBox(height: 16.h),
+                        SizedBox(height: 12.h),
 
-                        // Campo: E-mail
+                        // Email
                         TextFormField(
                           controller: emailController,
                           validator:
@@ -132,12 +133,15 @@ class _RegisterPageState extends State<RegisterPage> {
                                   .email('Digite um e-mail válido')
                                   .build(),
                           decoration: inputDecoration('E-mail'),
-                          style: TextStyle(color: Colors.white, fontSize: 20.w),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14.sp,
+                          ),
                           keyboardType: TextInputType.emailAddress,
                         ),
-                        SizedBox(height: 16.h),
+                        SizedBox(height: 12.h),
 
-                        // Campo: Telefone
+                        // Telefone
                         TextFormField(
                           controller: phoneController,
                           inputFormatters: [mask],
@@ -150,39 +154,41 @@ class _RegisterPageState extends State<RegisterPage> {
                                   )
                                   .build(),
                           decoration: inputDecoration('Telefone'),
-                          style: TextStyle(color: Colors.white, fontSize: 20.w),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14.sp,
+                          ),
                           keyboardType: TextInputType.phone,
                         ),
-                        SizedBox(height: 24.h),
+                        SizedBox(height: 20.h),
 
-                        // Botão de salvar
+                        // Botão Salvar (Reduzido)
                         SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.afinzAccent,
-                              padding: EdgeInsets.symmetric(vertical: 16.h),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.r),
-                              ),
-                            ),
+                          width: 120.w,
+                          height: 28.h,
+                          child: ElevatedButton.icon(
                             onPressed:
                                 state is RegisterLoading
                                     ? null
                                     : () => _submitForm(context),
-                            child:
-                                state is RegisterLoading
-                                    ? const CircularProgressIndicator(
-                                      color: Colors.white,
-                                    )
-                                    : Text(
-                                      'Salvar',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                            label: Text(
+                              'Salvar',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.afinzAccent,
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 8.w,
+                                vertical: 4.h,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6.r),
+                              ),
+                            ),
                           ),
                         ),
                       ],

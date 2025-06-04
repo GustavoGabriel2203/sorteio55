@@ -50,7 +50,7 @@ class _ParticipantsPageState extends State<ParticipantsPage> {
             'Participantes',
             style: TextStyle(
               color: Colors.white,
-              fontSize: 20.sp,
+              fontSize: 16.sp,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -71,15 +71,15 @@ class _ParticipantsPageState extends State<ParticipantsPage> {
                 return Center(
                   child: Text(
                     'Nenhum participante encontrado.',
-                    style: TextStyle(color: Colors.grey, fontSize: 16.sp),
+                    style: TextStyle(color: Colors.grey, fontSize: 13.sp),
                   ),
                 );
               }
 
               return ListView.separated(
-                padding: EdgeInsets.all(16.w),
+                padding: EdgeInsets.all(14.w),
                 itemCount: list.length,
-                separatorBuilder: (_, __) => SizedBox(height: 14.h),
+                separatorBuilder: (_, __) => SizedBox(height: 12.h),
                 itemBuilder: (context, index) {
                   final participant = list[index];
                   return ParticipantCard(
@@ -93,7 +93,7 @@ class _ParticipantsPageState extends State<ParticipantsPage> {
               return Center(
                 child: Text(
                   state.message,
-                  style: TextStyle(color: Colors.redAccent, fontSize: 16.sp),
+                  style: TextStyle(color: Colors.redAccent, fontSize: 13.sp),
                 ),
               );
             }
@@ -101,7 +101,7 @@ class _ParticipantsPageState extends State<ParticipantsPage> {
             return Center(
               child: Text(
                 'Erro desconhecido.',
-                style: TextStyle(color: Colors.red, fontSize: 16.sp),
+                style: TextStyle(color: Colors.red, fontSize: 13.sp),
               ),
             );
           },
@@ -126,17 +126,17 @@ class ParticipantCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 6.h),
-      padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
+      margin: EdgeInsets.symmetric(vertical: 4.h),
+      padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 14.w),
       decoration: BoxDecoration(
         color: const Color(0xFF2A2A2A),
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(10.r),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _participantInfoRow(Icons.person, name, isTitle: true),
-          SizedBox(height: 8.h),
+          SizedBox(height: 6.h),
           _participantInfoRow(Icons.phone, phone),
           SizedBox(height: 4.h),
           _participantInfoRow(Icons.email, email),
@@ -151,14 +151,14 @@ class ParticipantCard extends StatelessWidget {
         Icon(
           icon,
           color: isTitle ? Colors.green.shade400 : Colors.white70,
-          size: isTitle ? 20.sp : 16.sp,
+          size: isTitle ? 16.sp : 14.sp,
         ),
-        SizedBox(width: 8.w),
+        SizedBox(width: 6.w),
         Expanded(
           child: Text(
             text,
             style: TextStyle(
-              fontSize: isTitle ? 16.sp : 14.sp,
+              fontSize: isTitle ? 14.sp : 12.sp,
               fontWeight: isTitle ? FontWeight.w600 : FontWeight.normal,
               color: isTitle ? Colors.green.shade400 : Colors.white70,
             ),

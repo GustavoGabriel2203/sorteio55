@@ -7,8 +7,8 @@ class AppLogo extends StatelessWidget {
 
   const AppLogo({
     super.key,
-    this.width = 110,
-    this.height = 110,
+    this.width = 100,
+    this.height = 100,
     this.fit = BoxFit.contain,
   });
 

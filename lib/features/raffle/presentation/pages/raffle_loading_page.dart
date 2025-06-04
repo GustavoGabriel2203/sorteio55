@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
+import 'package:sorteio_55_tech/config/theme_colors.dart';
 import 'package:sorteio_55_tech/core/services/service_locator.dart';
 import 'package:sorteio_55_tech/features/raffle/presentation/cubit/raffle_cubit.dart';
 import 'package:sorteio_55_tech/features/raffle/presentation/cubit/raffle_state.dart';
@@ -127,7 +128,7 @@ class _RaffleLoadingPageState extends State<RaffleLoadingPage> {
                         style: TextStyle(
                           fontSize: 45.sp,
                           fontWeight: FontWeight.bold,
-                          color: Colors.greenAccent,
+                          color: AppColors.afinzAccent,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -143,7 +144,7 @@ class _RaffleLoadingPageState extends State<RaffleLoadingPage> {
                       ElevatedButton(
                         onPressed: () => Navigator.pop(context),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.greenAccent,
+                          backgroundColor: AppColors.afinzAccent,
                           foregroundColor: Colors.black,
                           padding: EdgeInsets.symmetric(
                             vertical: 12.h,
