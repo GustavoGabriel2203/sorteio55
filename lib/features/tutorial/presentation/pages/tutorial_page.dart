@@ -7,14 +7,17 @@ class TutorialPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
-          'Como usar o sorteio',
-          style: TextStyle(
+          'Bem-vindo ao Sorteio!',
+          style: textTheme.headlineSmall?.copyWith(
             fontFamily: 'Bebas',
-            fontSize: 25.sp,
+            fontSize: 28.sp,
+            letterSpacing: 1.2,
           ),
         ),
         centerTitle: true,
@@ -28,39 +31,30 @@ class TutorialPage extends StatelessWidget {
               SizedBox(height: 32.h),
               const _Item(
                 emoji: '1️⃣',
-                title: 'Valide o Código',
-                description: 'Digite o código fornecido pela software house.',
+                title: 'Valide seu código',
+                description: 'Use o código fornecido pela organização.',
               ),
               const _Item(
                 emoji: '2️⃣',
-                title: 'Cadastre os Participantes',
-                description: 'Realize os cadastros nos totens disponíveis.',
+                title: 'Cadastre todos os participantes',
+                description: 'Utilize os totens para adicionar os nomes.',
               ),
               const _Item(
                 emoji: '3️⃣',
-                title: 'Vá para aba de Sorteio',
+                title: 'Sincronize os dados',
                 description:
-                    'No totem onde será feito o sorteio, abra a tela de sorteio.',
+                    'No totem que fará o sorteio, clique em “Sincronizar” para puxar todos os cadastros.',
               ),
               const _Item(
                 emoji: '4️⃣',
-                title: 'Sincronize os Dados',
+                title: 'Realize o sorteio!',
                 description:
-                    'Clique em “Sincronizar” para juntar os cadastros de todos os totens.',
-              ),
-              const _Item(
-                emoji: '5️⃣',
-                title: 'Sorteie o Vencedor',
-                description: 'Clique em “Sortear” e veja quem ganhou!',
+                    'Toque em “Sortear” e descubra o grande vencedor!',
               ),
               const Spacer(),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: Colors.black,
-                  ),
                   onPressed: () {
                     Navigator.pushReplacementNamed(
                       context,
@@ -68,8 +62,8 @@ class TutorialPage extends StatelessWidget {
                     );
                   },
                   child: Text(
-                    'COMEÇAR',
-                    style: TextStyle(
+                    'VAMOS COMEÇAR',
+                    style: textTheme.labelLarge?.copyWith(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
                     ),
@@ -97,12 +91,14 @@ class _Item extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Padding(
       padding: EdgeInsets.only(bottom: 24.h),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(emoji, style: TextStyle(fontSize: 24.sp)),
+          Text(emoji, style: textTheme.titleLarge?.copyWith(fontSize: 24.sp)),
           SizedBox(width: 12.w),
           Expanded(
             child: Column(
@@ -110,7 +106,7 @@ class _Item extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: TextStyle(
+                  style: textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     fontSize: 16.sp,
                   ),
@@ -118,7 +114,7 @@ class _Item extends StatelessWidget {
                 SizedBox(height: 4.h),
                 Text(
                   description,
-                  style: TextStyle(fontSize: 14.sp),
+                  style: textTheme.bodyMedium?.copyWith(fontSize: 14.sp),
                 ),
               ],
             ),

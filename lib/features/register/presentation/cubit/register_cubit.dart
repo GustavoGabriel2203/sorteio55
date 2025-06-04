@@ -12,22 +12,21 @@ class RegisterCubit extends Cubit<RegisterState> {
       : super(RegisterInitial());
 
   Future<void> registerCustomer(Customer customer) async {
-    emit(RegisterLoading());
+  emit(RegisterLoading());
 
-    try {
-      // 1. Salva no banco local
-      await customerDao.insertCustomer(customer);
+  try {
+    print('🔍 Registrando cliente: ${customer.name}, ${customer.email}, ${customer.phone}');
 
-      // 2. Tenta enviar para API
-      final success = await remoteRepository.uploadCustomer(customer);
+    await customerDao.insertCustomer(customer);
+    final success = await remoteRepository.uploadCustomer(customer);
 
-      if (success) {
-        emit(RegisterSuccess('Cliente salvo localmente e enviado com sucesso.'));
-      } else {
-        emit(RegisterError('Salvo localmente, mas falha ao enviar para API.'));
-      }
-    } catch (e) {
-      emit(RegisterError('Erro ao registrar cliente: ${e.toString()}'));
+    if (success) {
+      emit(RegisterSuccess('Cliente salvo localmente e enviado com sucesso.'));
+    } else {
+      emit(RegisterError('Salvo localmente, mas falha ao enviar para API.'));
     }
+  } catch (e) {
+    emit(RegisterError('Erro ao registrar cliente: ${e.toString()}'));
   }
+}
 }

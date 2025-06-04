@@ -4,7 +4,7 @@ import 'package:sorteio_55_tech/features/event/presentation/pages/event_page.dar
 import 'package:sorteio_55_tech/features/menu/presentation/pages/menu_page.dart';
 import 'package:sorteio_55_tech/features/participants/presentation/pages/participants_page.dart';
 import 'package:sorteio_55_tech/features/raffle/presentation/pages/raffle_loading_page.dart';
-import 'package:sorteio_55_tech/features/raffle/presentation/pages/raffle_page.dart';
+// import 'package:sorteio_55_tech/features/raffle/presentation/pages/raffle_page.dart';
 import 'package:sorteio_55_tech/features/register/presentation/pages/register_page.dart';
 import 'package:sorteio_55_tech/features/register/presentation/pages/register_sucess_page.dart';
 import 'package:sorteio_55_tech/features/tutorial/presentation/pages/tutorial_page.dart';
@@ -17,7 +17,7 @@ class AppRoutes {
   static const register = '/register';
   static const registerSuccess = '/registerSuccess';
   static const participants = '/participants';
-  static const rafle = '/raffle';
+  // static const rafle = '/raffle';
   static const raffleLoading = '/raffleLoading';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -49,8 +49,8 @@ class AppRoutes {
       case participants:
         return MaterialPageRoute(builder: (_) => ParticipantsPage());
 
-      case rafle:
-        return MaterialPageRoute(builder: (_) => const RafflePage());
+      // case rafle:
+      //   return MaterialPageRoute(builder: (_) => const RafflePage()); // REMOVER CASO FUNCIONE O RAFFLE LOADING
 
       case raffleLoading:
         return MaterialPageRoute(builder: (_) => RaffleLoadingPage());

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:form_validator/form_validator.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:sorteio_55_tech/core/database/dao/events_dao.dart';
 
-import 'package:sorteio_55_tech/core/lucid_validator/lucid_model.dart';
-import 'package:sorteio_55_tech/core/lucid_validator/lucid_validator.dart';
+import 'package:sorteio_55_tech/core/database/dao/events_dao.dart';
 import 'package:sorteio_55_tech/core/services/service_locator.dart';
 import 'package:sorteio_55_tech/features/register/data/models/customer_model.dart';
 import 'package:sorteio_55_tech/features/register/presentation/cubit/register_cubit.dart';
@@ -22,23 +21,20 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
 
-  final mask = MaskTextInputFormatter(mask: '(##)#####-####');
-
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
 
-  final user = LucidModel(name: '', phone: '', email: '');
-  final validator = UserValidator();
+  final mask = MaskTextInputFormatter(mask: '(##)#####-####');
 
   void _submitForm(BuildContext context) async {
-  if (_formKey.currentState!.validate()) {
-    final model = await getIt<EventsDao>().getCurrentEvent();
+    if (!_formKey.currentState!.validate()) return;
 
+    final model = await getIt<EventsDao>().getCurrentEvent();
     if (model == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Evento não encontrado.')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Evento não encontrado.')));
       return;
     }
 
@@ -51,7 +47,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
     context.read<RegisterCubit>().registerCustomer(customer.toEntity());
   }
-}
 
   void _clearFields() {
     nameController.clear();
@@ -68,11 +63,6 @@ class _RegisterPageState extends State<RegisterPage> {
         appBar: AppBar(
           iconTheme: const IconThemeData(color: Colors.white),
           backgroundColor: const Color(0xFF1E1E1E),
-          // title: const Text(
-          //   'Cadastro de Participantes',
-          //   style: TextStyle(color: Colors.white),
-          // ),
-          // centerTitle: true,
         ),
         body: BlocConsumer<RegisterCubit, RegisterState>(
           listener: (context, state) {
@@ -80,9 +70,9 @@ class _RegisterPageState extends State<RegisterPage> {
               Navigator.pushNamed(context, '/registerSuccess');
               _clearFields();
             } else if (state is RegisterError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.message)),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.message)));
             }
           },
           builder: (context, state) {
@@ -105,33 +95,60 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                         ),
                         SizedBox(height: 35.h),
+
+                        // Campo: Nome
                         TextFormField(
                           controller: nameController,
-                          onChanged: (value) => user.name = value,
-                          validator: validator.byField(user, 'name'),
+                          validator:
+                              ValidationBuilder(localeName: 'pt-br')
+                                  .required('O nome é obrigatório')
+                                  .minLength(
+                                    3,
+                                    'O nome deve ter pelo menos 3 letras',
+                                  )
+                                  .maxLength(
+                                    50,
+                                    'O nome deve ter no máximo 50 letras',
+                                  )
+                                  .build(),
                           decoration: inputDecoration('Nome'),
-                          style:  TextStyle(color: Colors.white, fontSize: 20.w),
+                          style: TextStyle(color: Colors.white, fontSize: 20.w),
                         ),
                         SizedBox(height: 16.h),
+
+                        // Campo: E-mail
                         TextFormField(
                           controller: emailController,
-                          onChanged: (value) => user.email = value,
-                          validator: validator.byField(user, 'email'),
-                          decoration: inputDecoration('Email'),
-                          style:  TextStyle(color: Colors.white, fontSize: 20.w),
+                          validator:
+                              ValidationBuilder(localeName: 'pt-br')
+                                  .required('O e-mail é obrigatório')
+                                  .email('Digite um e-mail válido')
+                                  .build(),
+                          decoration: inputDecoration('E-mail'),
+                          style: TextStyle(color: Colors.white, fontSize: 20.w),
                           keyboardType: TextInputType.emailAddress,
                         ),
                         SizedBox(height: 16.h),
+
+                        // Campo: Telefone
                         TextFormField(
                           controller: phoneController,
-                          onChanged: (value) => user.phone = value,
                           inputFormatters: [mask],
-                          validator: validator.byField(user, 'phone'),
+                          validator:
+                              ValidationBuilder(localeName: 'pt-br')
+                                  .required('O telefone é obrigatório')
+                                  .minLength(
+                                    14,
+                                    'Número de telefone incompleto',
+                                  )
+                                  .build(),
                           decoration: inputDecoration('Telefone'),
-                          style:  TextStyle(color: Colors.white, fontSize: 20.w),
-                          keyboardType: TextInputType.number,
+                          style: TextStyle(color: Colors.white, fontSize: 20.w),
+                          keyboardType: TextInputType.phone,
                         ),
                         SizedBox(height: 24.h),
+
+                        // Botão de salvar
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
@@ -142,21 +159,23 @@ class _RegisterPageState extends State<RegisterPage> {
                                 borderRadius: BorderRadius.circular(12.r),
                               ),
                             ),
-                            onPressed: state is RegisterLoading
-                                ? null
-                                : () => _submitForm(context),
-                            child: state is RegisterLoading
-                                ? const CircularProgressIndicator(
-                                    color: Colors.white,
-                                  )
-                                : Text(
-                                    'Salvar',
-                                    style: TextStyle(
+                            onPressed:
+                                state is RegisterLoading
+                                    ? null
+                                    : () => _submitForm(context),
+                            child:
+                                state is RegisterLoading
+                                    ? const CircularProgressIndicator(
                                       color: Colors.white,
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.bold
+                                    )
+                                    : Text(
+                                      'Salvar',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
                           ),
                         ),
                       ],

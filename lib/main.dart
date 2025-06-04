@@ -8,13 +8,14 @@ import 'package:sorteio_55_tech/core/services/service_locator.dart';
 
 import 'package:sorteio_55_tech/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:sorteio_55_tech/features/event/presentation/cubit/event_cubit.dart';
+import 'package:sorteio_55_tech/features/menu/presentation/cubit/menu_cubit.dart';
 import 'package:sorteio_55_tech/features/register/presentation/cubit/register_cubit.dart';
 import 'package:sorteio_55_tech/features/participants/presentation/cubit/participants_cubit.dart';
 import 'package:sorteio_55_tech/features/raffle/presentation/cubit/raffle_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await setupLocator(); 
+  await setupLocator();
   runApp(const SorteioApp());
 }
 
@@ -43,7 +44,10 @@ class SorteioApp extends StatelessWidget {
               create: (_) => getIt<ParticipantsCubit>(),
             ),
             BlocProvider<RaffleCubit>(
-              create: (_) => getIt<RaffleCubit>(),
+              create: (_) => getIt<RaffleCubit>(), 
+            ),
+            BlocProvider<MenuCubit>(
+              create: (_) => getIt<MenuCubit>(),
             ),
           ],
           child: MaterialApp(
@@ -57,5 +61,3 @@ class SorteioApp extends StatelessWidget {
     );
   }
 }
-
-

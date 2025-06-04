@@ -14,17 +14,28 @@ InputDecoration inputDecoration(String label) {
       vertical: 18.h,
     ),
     enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide.none, // sem borda quando não focado
+      borderSide: BorderSide.none,
       borderRadius: BorderRadius.circular(12.r),
     ),
     focusedBorder: OutlineInputBorder(
       borderSide: BorderSide(color: Colors.green, width: 1.5.w),
       borderRadius: BorderRadius.circular(12.r),
     ),
+    errorBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.red, width: 1.5.w),
+      borderRadius: BorderRadius.circular(12.r),
+    ),
+    focusedErrorBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.redAccent, width: 1.5.w),
+      borderRadius: BorderRadius.circular(12.r),
+    ),
     border: OutlineInputBorder(
       borderSide: BorderSide.none,
       borderRadius: BorderRadius.circular(12.r),
     ),
+    errorStyle: TextStyle(
+      color: Colors.redAccent,
+      fontSize: 13.sp,
+    ),
   );
 }
-

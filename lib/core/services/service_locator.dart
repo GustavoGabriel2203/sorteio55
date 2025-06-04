@@ -15,6 +15,9 @@ import 'package:sorteio_55_tech/features/auth/domain/usecases/whitelabel_usecase
 import 'package:sorteio_55_tech/features/event/presentation/cubit/event_cubit.dart';
 import 'package:sorteio_55_tech/features/event/repositories/service_event.dart';
 
+// MENU
+import 'package:sorteio_55_tech/features/menu/presentation/cubit/menu_cubit.dart';
+
 // PARTICIPANTS
 import 'package:sorteio_55_tech/features/participants/data/repository/participants_service.dart';
 import 'package:sorteio_55_tech/features/participants/data/repository/participants_repository.dart';
@@ -45,40 +48,55 @@ Future<void> setupLocator() async {
   getIt.registerLazySingleton<WhitelabelUsecase>(
     () => WhitelabelUsecase(getIt<WhitelabelService>()),
   );
-  getIt.registerFactory<AuthCubit>(() => AuthCubit(getIt<WhitelabelUsecase>()));
+  getIt.registerFactory<AuthCubit>(
+    () => AuthCubit(getIt<WhitelabelUsecase>()),
+  );
 
   // EVENT
   getIt.registerLazySingleton<EventService>(() => EventService());
-  getIt.registerLazySingleton<EventCubit>(() => EventCubit(
-        getIt<EventService>(),
-        getIt<EventsDao>(),
-      ));
+  getIt.registerLazySingleton<EventCubit>(
+    () => EventCubit(
+      getIt<EventService>(),
+      getIt<EventsDao>(),
+    ),
+  );
 
-  // REGISTER (local + remoto)
+  // REGISTER
   getIt.registerLazySingleton<RemoteCustomerService>(
     () => RemoteCustomerService(),
   );
   getIt.registerLazySingleton<RemoteCustomerRepository>(
     () => RemoteCustomerRepositoryImpl(getIt<RemoteCustomerService>()),
   );
-  getIt.registerFactory(
-    () => RegisterCubit(getIt<CustomerDao>(), getIt<RemoteCustomerRepository>()),
+  getIt.registerFactory<RegisterCubit>(
+    () => RegisterCubit(
+      getIt<CustomerDao>(),
+      getIt<RemoteCustomerRepository>(),
+    ),
   );
 
   // PARTICIPANTS
-  getIt.registerLazySingleton<ParticipantService>(() => ParticipantService( ));
+  getIt.registerLazySingleton<ParticipantService>(() => ParticipantService());
   getIt.registerLazySingleton<ParticipantsRepository>(
     () => ParticipantsRepositoryImpl(getIt<ParticipantService>()),
   );
-  getIt.registerFactory(
+  getIt.registerFactory<ParticipantsCubit>(
     () => ParticipantsCubit(getIt<ParticipantsRepository>()),
   );
 
-  // RAFFLE
-  getIt.registerFactory(
+  // RAFFLE (agora sem participantsRepository)
+  getIt.registerFactory<RaffleCubit>(
     () => RaffleCubit(
       customerDao: getIt<CustomerDao>(),
       whitelabelDao: getIt<WhitelabelDao>(),
+      eventsDao: getIt<EventsDao>(),
+    ),
+  );
+
+  // MENU (mantém o uso do ParticipantsRepository)
+  getIt.registerFactory<MenuCubit>(
+    () => MenuCubit(
+      customerDao: getIt<CustomerDao>(),
       eventsDao: getIt<EventsDao>(),
       participantsRepository: getIt<ParticipantsRepository>(),
     ),

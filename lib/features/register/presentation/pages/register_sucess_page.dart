@@ -2,8 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 
-class RegisterSuccessPage extends StatelessWidget {
+class RegisterSuccessPage extends StatefulWidget {
   const RegisterSuccessPage({super.key});
+
+  @override
+  State<RegisterSuccessPage> createState() => _RegisterSuccessPageState();
+}
+
+class _RegisterSuccessPageState extends State<RegisterSuccessPage> {
+  @override
+  void initState() {
+    super.initState();
+
+    // Aguarda 4 segundos e volta automaticamente
+    Future.delayed(const Duration(seconds: 4), () {
+      if (mounted) Navigator.pop(context);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +31,7 @@ class RegisterSuccessPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Lottie.asset(
-                'assets/lottie/success.json', 
+                'assets/lottie/success.json',
                 height: 200.h,
                 repeat: true,
               ),

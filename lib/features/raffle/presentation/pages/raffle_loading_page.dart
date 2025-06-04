@@ -84,7 +84,7 @@ class _RaffleLoadingPageState extends State<RaffleLoadingPage> {
                   Icon(Icons.warning_amber_rounded, color: Colors.orange, size: 64.sp),
                   SizedBox(height: 16.h),
                   Text(
-                    'Não há participantes para sortear',
+                    'Não há participantes para sortear, sincronize primeiro.',
                     style: TextStyle(
                       fontSize: 20.sp,
                       color: Colors.white,
@@ -168,7 +168,7 @@ class _RaffleLoadingPageState extends State<RaffleLoadingPage> {
           // ⏳ Enquanto aguarda sorteio
           return Center(
             child: Lottie.asset(
-              'assets/lottie/loading.json',
+              'assets/lottie/loading2.json',
               width: 200.w,
               height: 200.h,
               repeat: true,
