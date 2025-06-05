@@ -26,7 +26,7 @@ class RaffleCubit extends Cubit<RaffleState> {
     }
 
     emit(RaffleLoadingAnimation());
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 4));
     await sortear();
   }
 
