@@ -2,12 +2,11 @@ abstract class RaffleState {}
 
 class RaffleInitial extends RaffleState {}
 
+class RaffleCheckingParticipants extends RaffleState {}
+
 class RaffleLoading extends RaffleState {}
 
-class RaffleSuccess extends RaffleState {
-  final String winnerName;
-  RaffleSuccess({required this.winnerName});
-}
+class RaffleLoadingAnimation extends RaffleState {}
 
 class RaffleShowWinner extends RaffleState {
   final String winnerName;
@@ -25,9 +24,5 @@ class RaffleError extends RaffleState {
 }
 
 class RaffleEmpty extends RaffleState {}
-
-class RaffleSynced extends RaffleState {}
-
-class RaffleSyncing extends RaffleState {}
 
 class RaffleCleaned extends RaffleState {}

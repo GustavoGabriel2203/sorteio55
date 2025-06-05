@@ -110,8 +110,6 @@ class MenuPage extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               AppLogo(
-                width: 48.w,
-                height: 48.h,
               ),
               SizedBox(width: 6.w),
             ],

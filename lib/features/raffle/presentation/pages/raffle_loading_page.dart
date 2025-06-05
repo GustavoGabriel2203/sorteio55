@@ -16,34 +16,14 @@ class RaffleLoadingPage extends StatefulWidget {
 
 class _RaffleLoadingPageState extends State<RaffleLoadingPage> {
   late final RaffleCubit _raffleCubit;
-  bool _hasSorted = false;
-  bool _canSort = true;
 
   @override
   void initState() {
     super.initState();
     _raffleCubit = getIt<RaffleCubit>();
-    _checkAndStartRaffle();
+    _raffleCubit.checkAndSort();
   }
 
-  /// Verifica se há participantes disponíveis para sorteio
-  Future<void> _checkAndStartRaffle() async {
-    final canSort = await _raffleCubit.hasParticipantsToSort();
-
-    if (!canSort) {
-      setState(() => _canSort = false);
-      _showSnack(context, 'Todos os participantes já foram sorteados.');
-      await Future.delayed(const Duration(seconds: 2));
-      if (mounted) Navigator.pop(context);
-      return;
-    }
-
-    _hasSorted = true;
-    await Future.delayed(const Duration(seconds: 4));
-    _raffleCubit.sortear();
-  }
-
-  /// Exibe um SnackBar flutuante com mensagem
   void _showSnack(BuildContext context, String message) {
     ScaffoldMessenger.of(context)
       ..removeCurrentSnackBar()
@@ -67,47 +47,30 @@ class _RaffleLoadingPageState extends State<RaffleLoadingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF121212),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF121212),
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: BlocConsumer<RaffleCubit, RaffleState>(
         bloc: _raffleCubit,
         listener: (context, state) {
           if (state is RaffleError) {
             _showSnack(context, state.message);
-            Future.delayed(const Duration(seconds: 2), () => Navigator.pop(context));
           }
         },
         builder: (context, state) {
-          // 🔸 Caso não haja participantes
-          if (!_canSort) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.warning_amber_rounded, color: Colors.orange, size: 64.sp),
-                  SizedBox(height: 16.h),
-                  Text(
-                    'Não há participantes para sortear, sincronize primeiro.',
-                    style: TextStyle(
-                      fontSize: 20.sp,
-                      color: Colors.white,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            );
-          }
-
-          // ✅ Vencedor sorteado com sucesso
           if (state is RaffleShowWinner) {
             return Stack(
               alignment: Alignment.center,
+              fit: StackFit.expand,
               children: [
                 Lottie.asset(
                   'assets/lottie/confetti.json',
                   repeat: true,
-                  fit: BoxFit.contain,
-                  width: double.infinity,
-                  height: double.infinity,
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -142,10 +105,12 @@ class _RaffleLoadingPageState extends State<RaffleLoadingPage> {
                       ),
                       SizedBox(height: 40.h),
                       ElevatedButton(
-                        onPressed: () => Navigator.pop(context),
+                        onPressed: (state is RaffleEmpty)
+                            ? null
+                            : () => _raffleCubit.checkAndSort(),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.afinzAccent,
-                          foregroundColor: Colors.black,
+                          backgroundColor: Colors.green,
+                          foregroundColor: Colors.white,
                           padding: EdgeInsets.symmetric(
                             vertical: 12.h,
                             horizontal: 24.w,
@@ -155,7 +120,7 @@ class _RaffleLoadingPageState extends State<RaffleLoadingPage> {
                           ),
                         ),
                         child: Text(
-                          'Voltar',
+                          'Sortear Novamente',
                           style: TextStyle(fontSize: 16.sp),
                         ),
                       ),
@@ -166,16 +131,41 @@ class _RaffleLoadingPageState extends State<RaffleLoadingPage> {
             );
           }
 
-          // ⏳ Enquanto aguarda sorteio
-          return Center(
-            child: Lottie.asset(
-              'assets/lottie/loading2.json',
-              width: 200.w,
-              height: 200.h,
-              repeat: true,
-              fit: BoxFit.contain,
-            ),
-          );
+          if (state is RaffleEmpty) {
+            return Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.check_circle_outline, size: 80.sp, color: Colors.white),
+                    SizedBox(height: 16.h),
+                    Text(
+                      'Todos os participantes foram sorteados ou a lista ainda não foi sincronizada.',
+                      style: TextStyle(color: Colors.white, fontSize: 18.sp),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+
+          if (state is RaffleCheckingParticipants ||
+              state is RaffleLoadingAnimation ||
+              state is RaffleLoading) {
+            return Center(
+              child: Lottie.asset(
+                'assets/lottie/loading2.json',
+                width: 200.w,
+                height: 200.h,
+                repeat: true,
+                fit: BoxFit.contain,
+              ),
+            );
+          }
+
+          return const SizedBox.shrink();
         },
       ),
     );

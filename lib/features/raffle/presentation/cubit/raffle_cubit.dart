@@ -16,6 +16,20 @@ class RaffleCubit extends Cubit<RaffleState> {
     required this.eventsDao,
   }) : super(RaffleInitial());
 
+  Future<void> checkAndSort() async {
+    emit(RaffleCheckingParticipants());
+
+    final canSort = await hasParticipantsToSort();
+    if (!canSort) {
+      emit(RaffleEmpty());
+      return;
+    }
+
+    emit(RaffleLoadingAnimation());
+    await Future.delayed(const Duration(seconds: 2));
+    await sortear();
+  }
+
   Future<void> sortear() async {
     emit(RaffleLoading());
 
@@ -72,9 +86,4 @@ class RaffleCubit extends Cubit<RaffleState> {
 
     return unsorted.isNotEmpty;
   }
-
-  
-  
-
 }
-
